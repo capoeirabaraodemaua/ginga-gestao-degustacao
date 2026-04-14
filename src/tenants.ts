@@ -16,24 +16,24 @@ export type TenantKey =
 
 /** Map from nucleo display name → tenant UUID */
 export const NUCLEO_TO_TENANT_ID: Record<string, string> = {
-  'Poliesportivo Edson Alves':  'a1000001-0000-4000-8000-000000000001',
-  'Poliesportivo do Ipiranga':  'a1000002-0000-4000-8000-000000000002',
-  'Saracuruna':                 'a1000003-0000-4000-8000-000000000003',
-  'Vila Urussaí':               'a1000004-0000-4000-8000-000000000004',
-  'Jayme Fichman':              'a1000005-0000-4000-8000-000000000005',
-  'Academia Mais Saúde':        'a1000006-0000-4000-8000-000000000006',
+  'Unidade Experimental 1':  'a1000001-0000-4000-8000-000000000001',
+  'Unidade Experimental 2':  'a1000002-0000-4000-8000-000000000002',
+  'Unidade Experimental 3':                 'a1000003-0000-4000-8000-000000000003',
+  'Unidade Experimental 4':               'a1000004-0000-4000-8000-000000000004',
+  'Unidade Experimental 5':              'a1000005-0000-4000-8000-000000000005',
+  'Unidade Experimental 6':        'a1000006-0000-4000-8000-000000000006',
   // Legacy / backward-compat
   'Mauá':                       'a1000001-0000-4000-8000-000000000001',
 };
 
 /** Map from admin nucleo key → tenant UUID */
 export const NUCLEO_KEY_TO_TENANT_ID: Record<string, string> = {
-  'edson-alves':          'a1000001-0000-4000-8000-000000000001',
-  'ipiranga':             'a1000002-0000-4000-8000-000000000002',
-  'saracuruna':           'a1000003-0000-4000-8000-000000000003',
-  'vila-urussai':         'a1000004-0000-4000-8000-000000000004',
-  'jayme-fichman':        'a1000005-0000-4000-8000-000000000005',
-  'academia-mais-saude':  'a1000006-0000-4000-8000-000000000006',
+  'demo 1':          'a1000001-0000-4000-8000-000000000001',
+  'demo 2':             'a1000002-0000-4000-8000-000000000002',
+  'demo 3':           'a1000003-0000-4000-8000-000000000003',
+  'demo 4':         'a1000004-0000-4000-8000-000000000004',
+  'demo 5':        'a1000005-0000-4000-8000-000000000005',
+  'demo 6':  'a1000006-0000-4000-8000-000000000006',
   'geral':                null as unknown as string, // geral sees all tenants
 };
 
