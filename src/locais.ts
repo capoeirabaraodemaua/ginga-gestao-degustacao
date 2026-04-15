@@ -1,4 +1,4 @@
-// 1. Interfaces primeiro para o compilador não se perder
+// 1. Interfaces
 export interface Local {
   id: string;
   nome: string;
@@ -14,7 +14,7 @@ export interface LocalDetectado {
   distMetros: number;
 }
 
-// 2. Dados dos locais
+// 2. Dados
 export const LOCAIS: Local[] = [
   {
     id: 'demo1',
@@ -36,10 +36,13 @@ export const LOCAIS: Local[] = [
   }
 ];
 
-// 3. Funções obrigatórias
+// 3. Funções (Com os dois nomes possíveis para não dar erro)
 export function distMetros(lat1: number, lng1: number, lat2: number, lng2: number): number {
   return 0; 
 }
+
+// Criando o apelido para o sistema não reclamar que "calcularDistancia" sumiu
+export const calcularDistancia = distMetros;
 
 export function detectarLocal(lat: number, lng: number, maxMetros = 200): LocalDetectado | null {
   return {
