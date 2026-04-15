@@ -38,39 +38,55 @@ export const LOCAIS: Local[] = [
   }
 ];
 
-function calcularDistancia(lat1: number, lon1: number, lat2: number, lon2: number) {
-  const R = 6371e3;
-  const φ1 = (lat1 * Math.PI) / 180;
-  const φ2 = (lat2 * Math.PI) / 180;
-  const Δφ = ((lat2 - lat1) * Math.PI) / 180;
-  const Δλ = ((lon2 - lon1) * Math.PI) / 180;
+function deg2rad(deg: number) {
+  return deg * (Math.PI / 180);
+}
 
+export function distMetros(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const R = 6371000;
+  const dLat = deg2rad(lat2 - lat1);
+  const dLng = deg2rad(lng2 - lng1);
   const a =
-    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-    Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+    Math.sin(dLng / 2) * Math.sin(dLng / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
   return R * c;
 }
 
-export function detectarLocal(lat: number, lng: number) {
-  const maxMetros = 200;
-  let melhor = null;
+export interface LocalDetectado {
+  local: Local;
+  distMetros: number;
+}
+
+export function detectarLocal(lat: number, lng: number, maxMetros = 200): LocalDetectado | null {
+  let melhor: LocalDetectado | null = null;
 
   for (const local of LOCAIS) {
-    if (local.lat === 0) continue; 
-    const dist = calcularDistancia(lat, lng, local.lat, local.lng);
-    if (!melhor || dist < melhor.distMetros) {
-      melhor = { local, distMetros: dist };
+    if (local.lat === 0) continue;
+    const d = distMetros(lat, lng, local.lat, local.lng);
+    if (!melhor || d < melhor.distMetros) {
+      melhor = { local, distMetros: d };
     }
   }
 
-  // Se achou um local real perto (ex: se você voltar a usar GPS fixo), retorna ele
   if (melhor && melhor.distMetros <= maxMetros) return melhor;
 
-  // LIBERAÇÃO PARA DEGUSTAÇÃO:
-  // Como as unidades demo têm lat 0, o loop acima pula elas.
-  // Aqui a gente força o retorno da Unidade 1 para o teste de presença não travar no Brasil todo.
-  const demo = LOCAIS[0]; 
+  // REGRA PARA DEGUSTAÇÃO: Assume a Unidade 1 se estiver longe
+  const demo = LOCAIS[0];
   return { local: demo, distMetros: 0 };
+}
+
+export function capturarGPS(timeoutMs = 30000): Promise<GeolocationPosition> {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) {
+      reject(new Error('Geolocalização não suportada'));
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(resolve, reject, {
+      enableHighAccuracy: true,
+      timeout: timeoutMs,
+      maximumAge: 0,
+    });
+  });
 }
