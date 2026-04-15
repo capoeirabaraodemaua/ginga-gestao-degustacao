@@ -7,61 +7,36 @@ export interface Local {
   lng: number;
   mapUrl: string;
 }
-
-export const LOCAIS: Local[] = [
   {
-    id: 'poliesportivo-edson-alves',
-    nome: 'Poliesportivo Edson Alves',
-    endereco: '7VR3+VW Magé, RJ',
-    nucleo: 'Poliesportivo Edson Alves',
-    lat: -22.7077527,
-    lng: -43.1451925,
-    mapUrl: 'https://maps.google.com/?q=-22.7077527,-43.1451925',
+   export const LOCAIS: Local[] = [
+  {
+    id: 'demo 1',
+    nome: 'Unidade Experimental 1',
+    endereco: 'Demonstração - Nível Brasil',
+    nucleo: 'Unidade Experimental 1',
+    lat: 0,
+    lng: 0,
+    mapUrl: ''
   },
   {
-    id: 'poliesportivo-ipiranga',
-    nome: 'Poliesportivo do Ipiranga',
-    endereco: '7RMC+M8 Parque Baia Branca, Magé - RJ',
-    nucleo: 'Poliesportivo do Ipiranga',
-    lat: -22.7157655,
-    lng: -43.1791247,
-    mapUrl: 'https://maps.google.com/?q=-22.7157655,-43.1791247',
+    id: 'demo 2',
+    nome: 'Unidade Experimental 2',
+    endereco: 'Demonstração - Nível Brasil',
+    nucleo: 'Unidade Experimental 2',
+    lat: 0,
+    lng: 0,
+    mapUrl: ''
   },
   {
-    id: 'polo-saracuruna',
-    nome: 'CIEP 318',
-    endereco: '8PGR+4V Parque Uruguaiana, Duque de Caxias - RJ',
-    nucleo: 'Saracuruna',
-    lat: -22.6746110,
-    lng: -43.2577859,
-    mapUrl: 'https://maps.google.com/?q=-22.6746110,-43.2577859',
-  },
-  {
-    id: 'nucleo-vila-urussai',
-    nome: 'Núcleo Vila Urussaí',
-    endereco: 'Vila Urussaí, Duque de Caxias - RJ',
-    nucleo: 'Vila Urussaí',
-    lat: -22.6681359,
-    lng: -43.2545703,
-    mapUrl: 'https://maps.google.com/?q=-22.6681359,-43.2545703',
-  },
-  {
-    id: 'nucleo-jayme-fichman',
-    nome: 'Núcleo Jayme Fichman',
-    endereco: 'Jayme Fichman, Duque de Caxias - RJ',
-    nucleo: 'Jayme Fichman',
-    lat: -22.6757683,
-    lng: -43.2487348,
-    mapUrl: 'https://maps.google.com/?q=-22.6757683,-43.2487348',
-  },
-  {
-    id: 'academia-mais-saude',
-    nome: 'Academia Mais Saúde',
-    endereco: 'Rua 15 de Novembro, 31B – Praia do Anil',
-    nucleo: 'Academia Mais Saúde',
-    lat: -22.6757683,
-    lng: -43.2487348,
-    mapUrl: 'https://maps.google.com/?q=-22.6757683,-43.2487348',
+    id: 'demo 3',
+    nome: 'Unidade Experimental 3',
+    endereco: 'Demonstração - Nível Brasil',
+    nucleo: 'Unidade Experimental 3',
+    lat: 0,
+    lng: 0,
+    mapUrl: ''
+  }
+];
   },
 ];
 
@@ -99,7 +74,15 @@ export function detectarLocal(lat: number, lng: number, maxMetros = 200): LocalD
       melhor = { local, distMetros: d };
     }
   }
+ // Se achou um local real perto, retorna ele
   if (melhor && melhor.distMetros <= maxMetros) return melhor;
+
+  // LIBERAÇÃO PARA DEGUSTAÇÃO:
+  // Se não achou nada perto, ele assume a "Unidade Experimental 1" 
+  // para permitir que o cliente teste a presença de qualquer lugar do Brasil.
+  const demo = LOCAIS.find(l => l.id === 'demo 1');
+  if (demo) return { local: demo, distMetros: 0 };
+
   return null;
 }
 
