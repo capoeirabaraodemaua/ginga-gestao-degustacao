@@ -29,14 +29,12 @@ export const LOCAIS: Local[] = [
   }
 ];
 
-// Função auxiliar para conversão de coordenadas
 function deg2rad(deg: number): number {
   return deg * (Math.PI / 180);
 }
 
-// Esta é a função principal que o sistema de presença usa
 export function distMetros(lat1: number, lng1: number, lat2: number, lng2: number): number {
-  const R = 6371000; // Raio da Terra em metros
+  const R = 6371000;
   const dLat = deg2rad(lat2 - lat1);
   const dLng = deg2rad(lng2 - lng1);
   const a =
@@ -47,26 +45,23 @@ export function distMetros(lat1: number, lng1: number, lat2: number, lng2: numbe
   return R * c;
 }
 
-// Interface para o retorno da detecção
 export interface LocalDetectado {
   local: Local;
   distMetros: number;
 }
 
-// Função que o seu componente de "Marcar Presença" chama
 export function detectarLocal(lat: number, lng: number, maxMetros = 200): LocalDetectado | null {
-  // REGRA DE OURO PARA DEGUSTAÇÃO: Sempre retorna a Unidade 1 para liberar o teste
-  return {
-    local: LOCAIS[0],
-    distMetros: 0
+  // REGRA DE OURO PARA DEGUSTAÇÃO: Sempre retorna a primeira unidade para o teste funcionar
+  return { 
+    local: LOCAIS[0], 
+    distMetros: 0 
   };
 }
 
-// Função para capturar o GPS do navegador/celular
 export function capturarGPS(timeoutMs = 30000): Promise<GeolocationPosition> {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
-      reject(new Error('Geolocalização não suportada no seu navegador.'));
+      reject(new Error('Geolocalização não suportada'));
       return;
     }
     navigator.geolocation.getCurrentPosition(resolve, reject, {
