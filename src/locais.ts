@@ -10,40 +10,33 @@ export interface Local {
 
 export const LOCAIS: Local[] = [
   {
-    id: 'demo 1',
+    id: 'demo1',
     nome: 'Unidade Experimental 1',
-    endereco: 'Demonstração (GPS Liberado)',
+    endereco: 'Demonstração',
     nucleo: 'Unidade Experimental 1',
     lat: 0,
     lng: 0,
     mapUrl: ''
   },
   {
-    id: 'demo 2',
+    id: 'demo2',
     nome: 'Unidade Experimental 2',
-    endereco: 'Demonstração (GPS Liberado)',
+    endereco: 'Demonstração',
     nucleo: 'Unidade Experimental 2',
-    lat: 0,
-    lng: 0,
-    mapUrl: ''
-  },
-  {
-    id: 'demo 3',
-    nome: 'Unidade Experimental 3',
-    endereco: 'Demonstração (GPS Liberado)',
-    nucleo: 'Unidade Experimental 3',
     lat: 0,
     lng: 0,
     mapUrl: ''
   }
 ];
 
-function deg2rad(deg: number) {
+// Função auxiliar para conversão de coordenadas
+function deg2rad(deg: number): number {
   return deg * (Math.PI / 180);
 }
 
+// Esta é a função principal que o sistema de presença usa
 export function distMetros(lat1: number, lng1: number, lat2: number, lng2: number): number {
-  const R = 6371000;
+  const R = 6371000; // Raio da Terra em metros
   const dLat = deg2rad(lat2 - lat1);
   const dLng = deg2rad(lng2 - lng1);
   const a =
@@ -54,33 +47,26 @@ export function distMetros(lat1: number, lng1: number, lat2: number, lng2: numbe
   return R * c;
 }
 
+// Interface para o retorno da detecção
 export interface LocalDetectado {
   local: Local;
   distMetros: number;
 }
 
+// Função que o seu componente de "Marcar Presença" chama
 export function detectarLocal(lat: number, lng: number, maxMetros = 200): LocalDetectado | null {
-  let melhor: LocalDetectado | null = null;
-
-  for (const local of LOCAIS) {
-    if (local.lat === 0) continue;
-    const d = distMetros(lat, lng, local.lat, local.lng);
-    if (!melhor || d < melhor.distMetros) {
-      melhor = { local, distMetros: d };
-    }
-  }
-
-  if (melhor && melhor.distMetros <= maxMetros) return melhor;
-
-  // REGRA PARA DEGUSTAÇÃO: Assume a Unidade 1 se estiver longe
-  const demo = LOCAIS[0];
-  return { local: demo, distMetros: 0 };
+  // REGRA DE OURO PARA DEGUSTAÇÃO: Sempre retorna a Unidade 1 para liberar o teste
+  return {
+    local: LOCAIS[0],
+    distMetros: 0
+  };
 }
 
+// Função para capturar o GPS do navegador/celular
 export function capturarGPS(timeoutMs = 30000): Promise<GeolocationPosition> {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
-      reject(new Error('Geolocalização não suportada'));
+      reject(new Error('Geolocalização não suportada no seu navegador.'));
       return;
     }
     navigator.geolocation.getCurrentPosition(resolve, reject, {
